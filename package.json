@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Cognescom/RollingScopesSchoolNodeJS.git"
   },
   "type": "commonjs",
   "description": "REST service starter for RS School",
@@ -14,7 +14,7 @@
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"
   },
-  "author": "Stas Nesteruk", 
+  "author": "Stas Nesteruk",
   "keywords": [
     "rs",
     "school",
