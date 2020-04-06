@@ -1,11 +1,3 @@
-// - Board (set of columns):
-//   ```javascript
-//   { id, title, columns }
-//   ```
-// - Column (set of tasks):
-//   ```javascript
-//    { id, title, order }
-
 const uuid = require('uuid');
 
 class Column {

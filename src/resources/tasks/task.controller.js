@@ -1,6 +1,6 @@
 const HTTP_STATUS = require('http-status');
 const taskService = require('./task.service');
-const boardService = require('./../board/board.service');
+const boardService = require('./../boards/board.service');
 const { sendJsonError } = require('./../../utils/response/response.utils');
 
 const getTasksTreatment = async (req, res) => {
