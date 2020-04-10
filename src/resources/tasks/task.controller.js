@@ -3,7 +3,7 @@ const taskService = require('./task.service');
 const boardService = require('./../boards/board.service');
 const { sendJsonError } = require('./../../utils/response/response.utils');
 
-const getTasksTreatment = async (req, res) => {
+const getTasksTreatment = async (req, res, next) => {
   try {
     const boardId = req.params.boardId;
     const board = await boardService.getById(boardId);
@@ -19,15 +19,11 @@ const getTasksTreatment = async (req, res) => {
     const tasks = await taskService.getAll(boardId);
     res.status(HTTP_STATUS.OK).send(tasks);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const getTaskTreatment = async (req, res) => {
+const getTaskTreatment = async (req, res, next) => {
   try {
     const boardId = req.params.boardId;
     const taskId = req.params.taskId;
@@ -53,15 +49,11 @@ const getTaskTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(task);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const createTaskTreatment = async (req, res) => {
+const createTaskTreatment = async (req, res, next) => {
   const keys = Object.keys(req.body);
   const requiredFields = ['title', 'order', 'description', 'userId', 'boardId'];
   const isValidOperation = requiredFields.every(key => keys.includes(key));
@@ -88,15 +80,11 @@ const createTaskTreatment = async (req, res) => {
     const task = await taskService.create(req.body);
     res.status(HTTP_STATUS.OK).send(task);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const updateTaskTreatment = async (req, res) => {
+const updateTaskTreatment = async (req, res, next) => {
   const keys = Object.keys(req.body);
   const allowedUpdates = [
     'id',
@@ -137,15 +125,11 @@ const updateTaskTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(task);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const deleteTaskTreatment = async (req, res) => {
+const deleteTaskTreatment = async (req, res, next) => {
   try {
     const boardId = req.params.boardId;
     const taskId = req.params.taskId;
@@ -169,11 +153,7 @@ const deleteTaskTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(task);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 

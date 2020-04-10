@@ -3,20 +3,16 @@ const User = require('./../../models/user.model');
 const userService = require('./user.service');
 const { sendJsonError } = require('./../../utils/response/response.utils');
 
-const getUsersTreatment = async (req, res) => {
+const getUsersTreatment = async (req, res, next) => {
   try {
     const users = await userService.getAll();
     res.status(HTTP_STATUS.OK).send(users);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const getUserTreatment = async (req, res) => {
+const getUserTreatment = async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const user = await userService.getById(userId);
@@ -31,15 +27,11 @@ const getUserTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(User.toResponse(user));
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const createUserTreatment = async (req, res) => {
+const createUserTreatment = async (req, res, next) => {
   const keys = Object.keys(req.body);
   const requiredFields = ['name', 'login', 'password'];
   const isValidOperation = requiredFields.every(key => keys.includes(key));
@@ -52,15 +44,11 @@ const createUserTreatment = async (req, res) => {
     const user = await userService.create(req.body);
     res.status(HTTP_STATUS.OK).send(User.toResponse(user));
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const updateUserTreatment = async (req, res) => {
+const updateUserTreatment = async (req, res, next) => {
   const userId = req.params.userId;
   const keys = Object.keys(req.body);
   const allowedUpdates = ['id', 'name', 'login', 'password'];
@@ -81,15 +69,11 @@ const updateUserTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(User.toResponse(user));
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const deleteUserTreatment = async (req, res) => {
+const deleteUserTreatment = async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const user = await userService.delete(userId);
@@ -102,11 +86,7 @@ const deleteUserTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.NO_CONTENT).send('The user has been deleted');
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 

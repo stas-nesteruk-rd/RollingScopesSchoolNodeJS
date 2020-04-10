@@ -2,20 +2,16 @@ const HTTP_STATUS = require('http-status');
 const boardService = require('./board.service');
 const { sendJsonError } = require('./../../utils/response/response.utils');
 
-const getBoardsTreatment = async (req, res) => {
+const getBoardsTreatment = async (req, res, next) => {
   try {
     const boards = await boardService.getAll();
     res.status(HTTP_STATUS.OK).send(boards);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const getBoardTreatment = async (req, res) => {
+const getBoardTreatment = async (req, res, next) => {
   try {
     const boardId = req.params.boardId;
     const board = await boardService.getById(boardId);
@@ -28,15 +24,11 @@ const getBoardTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(board);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const createBoardTreatment = async (req, res) => {
+const createBoardTreatment = async (req, res, next) => {
   const boardKeys = Object.keys(req.body);
   const requiredBoardFiels = ['title', 'columns'];
   const requiredColumnFiels = ['title', 'order'];
@@ -61,15 +53,11 @@ const createBoardTreatment = async (req, res) => {
     const board = await boardService.create(req.body);
     res.status(HTTP_STATUS.OK).send(board);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const updateBoardTreatment = async (req, res) => {
+const updateBoardTreatment = async (req, res, next) => {
   const boardId = req.params.boardId;
   const keys = Object.keys(req.body);
   const allowedBoardUpdates = ['id', 'title', 'columns'];
@@ -102,15 +90,11 @@ const updateBoardTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(board);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
-const deleteBoardTreatment = async (req, res) => {
+const deleteBoardTreatment = async (req, res, next) => {
   try {
     const boardId = req.params.boardId;
     const board = await boardService.delete(boardId);
@@ -123,11 +107,7 @@ const deleteBoardTreatment = async (req, res) => {
     }
     res.status(HTTP_STATUS.OK).send(board);
   } catch (err) {
-    sendJsonError(
-      res,
-      { message: err.message },
-      HTTP_STATUS.INTERNAL_SERVER_ERROR
-    );
+    return next(err);
   }
 };
 
