@@ -1,7 +1,5 @@
 const dateToString = (date = new Date()) => {
-  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 };
 
-module.exports = {
-  dateToString
-};
+module.exports = dateToString;

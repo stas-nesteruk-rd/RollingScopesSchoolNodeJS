@@ -3,17 +3,15 @@ const HTTP_STATUS = require('http-status');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
-const { logger } = require('./../../src/utils/logger/logger.utils');
+const logger = require('./../../src/utils/logger/logger.utils');
+const dateToString = require('./../../src/utils/date/date.utils');
+const internalServerErrorHandler = require('./../../src/middleware/errorHandler');
+const morgan = require('../../src/configs/morgan.config');
 const { apiRouter } = require('./../../src/router');
-const { dateToString } = require('./../../src/utils/date/date.utils');
-const { morgan } = require('../../src/configs/morgan.config');
 const {
   sendJsonData,
   sendJsonError
 } = require('./../../src/utils/response/response.utils');
-const {
-  internalServerErrorHandler
-} = require('./../../src/middleware/errorHandler');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
@@ -56,6 +54,4 @@ router.get('*', (req, res) => {
 app.use(apiRouter);
 app.use(router);
 
-module.exports = {
-  app
-};
+module.exports = app;

@@ -1,6 +1,6 @@
 const morgan = require('morgan');
-const { logger } = require('../utils/logger/logger.utils');
-const { dateToString } = require('../utils/date/date.utils');
+const logger = require('../utils/logger/logger.utils');
+const dateToString = require('./../utils/date/date.utils');
 const PARAMS_TITLE = 'Params: ';
 const QUERY_TITLE = 'Query: ';
 const BODY_TITLE = 'Body: ';
@@ -41,17 +41,15 @@ morgan.token('body', (req, res) => {
   return convertJSONtoString(BODY_TITLE, req.body);
 });
 
-module.exports = {
-  morgan: morgan((tokens, req, res) => {
-    const info = [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.params(req, res),
-      tokens.query(req, res),
-      tokens.body(req, res),
-      tokens.status(req, res),
-      tokens['response-time'](req, res)
-    ].join('; ');
-    logger.info(`${dateToString()}: ${info} ms`);
-  })
-};
+module.exports = morgan((tokens, req, res) => {
+  const info = [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.params(req, res),
+    tokens.query(req, res),
+    tokens.body(req, res),
+    tokens.status(req, res),
+    tokens['response-time'](req, res)
+  ].join('; ');
+  logger.info(`${dateToString()}: ${info} ms`);
+});

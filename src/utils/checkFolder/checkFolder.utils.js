@@ -8,6 +8,4 @@ const checkFolder = path => {
   }
 };
 
-module.exports = {
-  checkFolder
-};
+module.exports = checkFolder;

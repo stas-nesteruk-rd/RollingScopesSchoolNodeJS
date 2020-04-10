@@ -1,6 +1,6 @@
 const HTTP_STATUS = require('http-status');
-const { logger } = require('./../utils/logger/logger.utils');
-const { dateToString } = require('./../utils/date/date.utils');
+const logger = require('./../utils/logger/logger.utils');
+const dateToString = require('./../utils/date/date.utils');
 const { sendJsonError } = require('./../utils/response/response.utils');
 
 // eslint-disable-next-line  no-unused-vars
@@ -15,6 +15,4 @@ const internalServerErrorHandler = (error, req, res, next) => {
   );
 };
 
-module.exports = {
-  internalServerErrorHandler
-};
+module.exports = internalServerErrorHandler;
