@@ -1,4 +1,6 @@
 const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 
 // eslint-disable-next-line  no-unused-vars
 morgan.token('params', (req, res) => {
@@ -27,6 +29,17 @@ morgan.token('body', (req, res) => {
   return `Body: ${JSON.stringify(req.body)}`;
 });
 
+const accessLogStream = fs.createWriteStream(
+  path.join(process.cwd(), '/logs/access.log'),
+  { flags: 'a' }
+);
+
 module.exports = {
-  morgan
+  loggingConsole: morgan(
+    ':method; :url; :params; :query; :body; :status - :response-time ms'
+  ),
+  loggingFile: morgan(
+    ':date :method; :url; :params; :query; :body; :status - :response-time ms',
+    { stream: accessLogStream }
+  )
 };

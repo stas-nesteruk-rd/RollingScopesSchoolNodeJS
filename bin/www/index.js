@@ -3,8 +3,12 @@ const HTTP_STATUS = require('http-status');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
-const fs = require('fs');
-const { morgan } = require('./../../src/common/morgan.config');
+
+const {
+  loggingConsole,
+  loggingFile
+} = require('./../../src/common/morgan.config');
+const { logger } = require('./../../src/utils/logger/logger.utils');
 const { apiRouter } = require('./../../src/router');
 const {
   sendJsonData,
@@ -19,26 +23,33 @@ const router = express.Router();
 app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-const accessLogStream = fs.createWriteStream(
-  path.join(process.cwd(), '/logs/access.log'),
-  { flags: 'a' }
-);
-app.use(
-  morgan(
-    ':date :method; :url; :params; :query; :body; :status - :response-time ms'
-  )
-);
-app.use(
-  morgan(
-    ':date :method; :url; :params; :query; :body; :status - :response-time ms',
-    { stream: accessLogStream }
-  )
-);
+app.use(loggingConsole);
+app.use(loggingFile);
+
+process.on('uncaughtException', error => {
+  logger.error(
+    `${new Date().toString()} - uncaughtException: ${error.message}; Stack: ${
+      error.stack
+    }`
+  );
+  // eslint-disable-next-line  no-process-exit
+  process.exit(1);
+});
+
+process.on('unhandledRejection', error => {
+  logger.error(
+    `${new Date().toString()} - unhandledRejection: ${error.message}; Stack: ${
+      error.stack
+    }`
+  );
+});
+
 router.get('/', (req, res) => {
   sendJsonData(res, { message: 'Greetings to you!' }, HTTP_STATUS.OK);
 });
 
 router.get('*', (req, res) => {
+  logger.error(`Wrong url: ${req.url}`);
   sendJsonError(res, { message: 'Ups, something went wrong..' });
 });
 
