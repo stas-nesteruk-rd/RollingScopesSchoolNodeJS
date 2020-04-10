@@ -1,18 +1,10 @@
-const fs = require('fs');
 const path = require('path');
+const { checkFolder } = require('./../checkFolder/checkFolder.utils');
 const { createLogger, format, transports } = require('winston');
 
 const LOGS_FOLDER_NAME = '/logs';
 
-const isLogsFolderExist = () => {
-  // eslint-disable-next-line no-sync
-  if (!fs.existsSync(path.join(process.cwd(), LOGS_FOLDER_NAME))) {
-    // eslint-disable-next-line no-sync
-    fs.mkdirSync(path.join(process.cwd(), LOGS_FOLDER_NAME));
-  }
-};
-
-isLogsFolderExist();
+checkFolder(path.join(process.cwd(), LOGS_FOLDER_NAME));
 
 const logger = createLogger({
   level: 'silly',

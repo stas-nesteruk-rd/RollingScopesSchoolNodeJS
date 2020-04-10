@@ -3,17 +3,17 @@ const HTTP_STATUS = require('http-status');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
-
-const {
-  loggingConsole,
-  loggingFile
-} = require('./../../src/common/morgan.config');
 const { logger } = require('./../../src/utils/logger/logger.utils');
 const { apiRouter } = require('./../../src/router');
+const { dateToString } = require('./../../src/utils/date/date.utils');
+const { morgan } = require('../../src/configs/morgan.config');
 const {
   sendJsonData,
   sendJsonError
 } = require('./../../src/utils/response/response.utils');
+const {
+  internalServerErrorHandler
+} = require('./../../src/middleware/errorHandler');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
@@ -23,12 +23,12 @@ const router = express.Router();
 app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(loggingConsole);
-app.use(loggingFile);
+app.use(morgan);
+app.use(internalServerErrorHandler);
 
 process.on('uncaughtException', error => {
   logger.error(
-    `${new Date().toString()} - uncaughtException: ${error.message}; Stack: ${
+    `${dateToString()} - uncaughtException: ${error.message}; Stack: ${
       error.stack
     }`
   );
@@ -38,7 +38,7 @@ process.on('uncaughtException', error => {
 
 process.on('unhandledRejection', error => {
   logger.error(
-    `${new Date().toString()} - unhandledRejection: ${error.message}; Stack: ${
+    `${dateToString()} - unhandledRejection: ${error.message}; Stack: ${
       error.stack
     }`
   );
