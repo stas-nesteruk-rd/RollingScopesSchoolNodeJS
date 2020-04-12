@@ -6,10 +6,24 @@ const QUERY_TITLE = 'Query: ';
 const BODY_TITLE = 'Body: ';
 const EMPTY = 'empty';
 
+// TODO refactor
 const convertJSONtoString = (title, data) => {
   let result = title;
-  for (const [key, value] of Object.entries(data)) {
-    result = result.concat(key, ' - ', value, ', ');
+  for (const [name, value] of Object.entries(data)) {
+    if (Array.isArray(value)) {
+      result = result.concat(name, ': ');
+      if (Object.keys(value).length > 0) {
+        // eslint-disable-next-line no-loop-func
+        value.forEach(item => {
+          const keys = Object.keys(item);
+          keys.forEach(key => {
+            result = result.concat(key, ' - ', item[key], ', ');
+          });
+        });
+      }
+    } else {
+      result = result.concat(name, ' - ', value, ', ');
+    }
   }
   return result.substring(0, result.length - 2);
 };
