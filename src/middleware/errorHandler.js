@@ -1,13 +1,19 @@
 const HTTP_STATUS = require('http-status');
 const logger = require('./../utils/logger/logger.utils');
 const dateToString = require('./../utils/date/date.utils');
+const AbstractError = require('./../errors/AbstractError');
 const { sendJsonError } = require('./../utils/response/response.utils');
 
 // eslint-disable-next-line  no-unused-vars
-const internalServerErrorHandler = (error, req, res, next) => {
-  logger.error(
-    `${dateToString()} - Exception: ${error.message}; Stack: ${error.stack}`
-  );
+const errorHandler = (error, req, res, next) => {
+  logger.error({
+    date: dateToString(),
+    message: error.message,
+    stack: error.stack
+  });
+  if (error instanceof AbstractError) {
+    return sendJsonError(res, { message: error.message }, error.status);
+  }
   sendJsonError(
     res,
     { message: error.message },
@@ -15,4 +21,4 @@ const internalServerErrorHandler = (error, req, res, next) => {
   );
 };
 
-module.exports = internalServerErrorHandler;
+module.exports = errorHandler;

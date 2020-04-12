@@ -5,13 +5,16 @@ const path = require('path');
 const YAML = require('yamljs');
 const logger = require('./../../src/utils/logger/logger.utils');
 const dateToString = require('./../../src/utils/date/date.utils');
-const internalServerErrorHandler = require('./../../src/middleware/errorHandler');
 const morgan = require('../../src/configs/morgan.config');
+const errorHandler = require('./../../src/middleware/errorHandler');
 const { apiRouter } = require('./../../src/router');
 const {
   sendJsonData,
   sendJsonError
 } = require('./../../src/utils/response/response.utils');
+
+const UNCAUGHT_EXCEPTION = 'uncaughtException';
+const UNHANDLED_REJECTION = 'unhandledRejection';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
@@ -22,25 +25,6 @@ app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(morgan);
-app.use(internalServerErrorHandler);
-
-process.on('uncaughtException', error => {
-  logger.error(
-    `${dateToString()} - uncaughtException: ${error.message}; Stack: ${
-      error.stack
-    }`
-  );
-  // eslint-disable-next-line  no-process-exit
-  process.exit(1);
-});
-
-process.on('unhandledRejection', error => {
-  logger.error(
-    `${dateToString()} - unhandledRejection: ${error.message}; Stack: ${
-      error.stack
-    }`
-  );
-});
 
 router.get('/', (req, res) => {
   sendJsonData(res, { message: 'Greetings to you!' }, HTTP_STATUS.OK);
@@ -53,5 +37,27 @@ router.get('*', (req, res) => {
 
 app.use(apiRouter);
 app.use(router);
+
+app.use(errorHandler);
+
+process
+  .on('uncaughtException', error => {
+    logger.error({
+      date: dateToString(),
+      type: UNCAUGHT_EXCEPTION,
+      message: error.message,
+      stack: error.stack
+    });
+    // eslint-disable-next-line  no-process-exit
+    process.exit(1);
+  })
+  .on('unhandledRejection', error => {
+    logger.error({
+      date: dateToString(),
+      type: UNHANDLED_REJECTION,
+      message: error.message,
+      stack: error.stack
+    });
+  });
 
 module.exports = app;
