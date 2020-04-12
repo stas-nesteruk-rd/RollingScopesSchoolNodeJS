@@ -45,7 +45,7 @@ process
     logger.error({
       date: dateToString(),
       type: UNCAUGHT_EXCEPTION,
-      message: error.message,
+      message: `${UNCAUGHT_EXCEPTION}: ${error.message}`,
       stack: error.stack
     });
     // eslint-disable-next-line  no-process-exit
@@ -55,7 +55,7 @@ process
     logger.error({
       date: dateToString(),
       type: UNHANDLED_REJECTION,
-      message: error.message,
+      message: `${UNHANDLED_REJECTION}: ${error.message}`,
       stack: error.stack
     });
   });
