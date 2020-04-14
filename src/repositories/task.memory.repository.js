@@ -1,4 +1,4 @@
-const tasks = [
+let tasks = [
   {
     id: '8d0f37de-4649-4b79-8641-0e6af24c4036',
     title: 'Title1',
@@ -49,12 +49,9 @@ const tasks = [
 exports.getAll = async boardId =>
   tasks.filter(task => task.boardId === boardId);
 
-exports.getById = async (boardId, taskId) =>
-  tasks.find(task => {
-    if (task.id === taskId && task.boardId === boardId) {
-      return task;
-    }
-  });
+exports.getById = async (boardId, taskId) => {
+  return tasks.find(task => task.boardId === boardId && task.id === taskId);
+};
 
 exports.save = async task => tasks.push(task);
 
@@ -70,10 +67,7 @@ exports.delete = async (boardId, id) => {
 };
 
 exports.deleteAllTasksByBoardId = async boardId => {
-  const found = tasks.filter(task => task.boardId === boardId);
-  found.forEach(task => {
-    tasks.splice(task, 1);
-  });
+  tasks = tasks.filter(task => task.boardId !== boardId);
 };
 
 exports.updateUserIdOnNullbyId = async id => {
