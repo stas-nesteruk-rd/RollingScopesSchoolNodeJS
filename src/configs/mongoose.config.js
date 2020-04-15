@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const setupDataBase = require('./../db/loadData/loadData');
 const connectionURL = process.env.MONGO_CONNECTION_STRING;
 
 const connectToDB = cb => {
@@ -9,8 +10,9 @@ const connectToDB = cb => {
   });
 
   const db = mongoose.connection;
-  db.on('connected', () => {
+  db.on('connected', async () => {
     console.log(`Mongoose connected to ${connectionURL}`);
+    await setupDataBase();
     cb();
   });
 
@@ -24,6 +26,5 @@ const connectToDB = cb => {
 };
 
 module.exports = {
-  mongoose,
   connectToDB
 };

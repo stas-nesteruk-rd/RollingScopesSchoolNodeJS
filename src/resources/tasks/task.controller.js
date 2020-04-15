@@ -79,7 +79,7 @@ const updateTaskTreatment = async (req, res, next) => {
     checkUUID(taskId);
     const keys = Object.keys(req.body);
     const allowedUpdates = [
-      'id',
+      '_id',
       'title',
       'order',
       'description',

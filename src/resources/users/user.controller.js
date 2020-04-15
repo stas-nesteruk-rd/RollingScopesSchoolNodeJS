@@ -1,5 +1,4 @@
 const HTTP_STATUS = require('http-status');
-const User = require('./../../models/user.model');
 const userService = require('./user.service');
 const ValidationError = require('./../../errors/ValidationError');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
@@ -22,7 +21,7 @@ const getUserTreatment = async (req, res, next) => {
     if (!user) {
       throw new ResourceNotFoundError(`User don't exist by id: ${userId}`);
     }
-    res.status(HTTP_STATUS.OK).send(User.toResponse(user));
+    res.status(HTTP_STATUS.OK).send(user);
   } catch (err) {
     return next(err);
   }
@@ -37,7 +36,7 @@ const createUserTreatment = async (req, res, next) => {
       throw new ValidationError('Wrong operation! Send: name, login, password');
     }
     const user = await userService.create(req.body);
-    res.status(HTTP_STATUS.OK).send(User.toResponse(user));
+    res.status(HTTP_STATUS.OK).send(user);
   } catch (err) {
     return next(err);
   }
@@ -48,7 +47,7 @@ const updateUserTreatment = async (req, res, next) => {
     const userId = req.params.userId;
     checkUUID(userId);
     const keys = Object.keys(req.body);
-    const allowedUpdates = ['id', 'name', 'login', 'password'];
+    const allowedUpdates = ['_id', 'name', 'login', 'password'];
     const isValidOperation = keys.every(key => allowedUpdates.includes(key));
     if (!isValidOperation) {
       throw new ValidationError(
@@ -59,7 +58,7 @@ const updateUserTreatment = async (req, res, next) => {
     if (!user) {
       throw new ResourceNotFoundError(`User don't exist by id: ${userId}`);
     }
-    res.status(HTTP_STATUS.OK).send(User.toResponse(user));
+    res.status(HTTP_STATUS.OK).send(user);
   } catch (err) {
     return next(err);
   }

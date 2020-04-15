@@ -59,8 +59,8 @@ const updateBoardTreatment = async (req, res, next) => {
     const boardId = req.params.boardId;
     checkUUID(boardId);
     const keys = Object.keys(req.body);
-    const allowedBoardUpdates = ['id', 'title', 'columns'];
-    const allowedColumnUpdates = ['id', 'title', 'order'];
+    const allowedBoardUpdates = ['_id', 'title', 'columns'];
+    const allowedColumnUpdates = ['_id', 'title', 'order'];
     let isValidOperation = keys.every(key => allowedBoardUpdates.includes(key));
     if (!isValidOperation) {
       throw new ValidationError(
@@ -78,7 +78,9 @@ const updateBoardTreatment = async (req, res, next) => {
         );
       }
     }
+    console.log(req.body);
     const board = await boardService.update(boardId, req.body);
+    console.log(board);
     if (!board) {
       throw new ResourceNotFoundError(`Board don't exist by id: ${boardId}`);
     }

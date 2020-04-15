@@ -6,6 +6,7 @@ const { sendJsonError } = require('./../utils/response/response.utils');
 
 // eslint-disable-next-line  no-unused-vars
 const errorHandler = (error, req, res, next) => {
+  console.log(error);
   logger.error({
     date: dateToString(),
     message: error.message,

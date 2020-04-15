@@ -1,7 +1,7 @@
 /* eslint-disable */
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-const ValidationError = require('../errors/ValidationError');
+const ValidationError = require('../../errors/ValidationError');
 
 const defineUserModel = mongoose => {
   const schema = new mongoose.Schema(
@@ -18,14 +18,13 @@ const defineUserModel = mongoose => {
       login: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
       },
       password: {
         type: String,
         required: true,
         trim: true,
-        minlength: 7,
+        minlength: 5,
         validate(value) {
           if (value.includes('password')) {
             throw new ValidationError('Password cannot contain "password"');
@@ -34,7 +33,8 @@ const defineUserModel = mongoose => {
       }
     },
     {
-      timestamps: true
+      timestamps: false,
+      versionKey: false
     }
   );
 

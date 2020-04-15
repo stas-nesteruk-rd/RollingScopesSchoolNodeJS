@@ -1,5 +1,6 @@
 require('./../src/configs/env.config');
 const { connectToDB } = require('./../src/configs/mongoose.config');
+// require('./../src/configs/mongoose.config');
 const logger = require('./../src/utils/logger/logger.utils');
 const dateToString = require('./../src/utils/date/date.utils');
 const app = require('./../bin/www/index');
