@@ -55,7 +55,7 @@ describe('Boards suite', () => {
 
       // Test
       await request
-        .get(routes.boards.getById(expectedBoard._id))
+        .get(routes.boards.getById(expectedBoard.id))
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
@@ -76,8 +76,8 @@ describe('Boards suite', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
-          boardId = res.body._id;
-          expect(res.body._id).to.be.a('string');
+          boardId = res.body.id;
+          expect(res.body.id).to.be.a('string');
           jestExpect(res.body).toMatchObject(TEST_BOARD_DATA);
         });
 
@@ -106,21 +106,21 @@ describe('Boards suite', () => {
 
       // Test
       await request
-        .put(routes.boards.update(boardToUpdate._id))
+        .put(routes.boards.update(boardToUpdate.id))
         .set('Accept', 'application/json')
         .send(updatedBoard)
         .expect(200)
         .expect('Content-Type', /json/);
 
       await request
-        .get(routes.boards.getById(updatedBoard._id))
+        .get(routes.boards.getById(updatedBoard.id))
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => jestExpect(res.body).toMatchObject(updatedBoard));
 
       // Teardown
-      await request.delete(routes.boards.delete(updatedBoard._id));
+      await request.delete(routes.boards.delete(updatedBoard.id));
     });
   });
 
@@ -134,7 +134,7 @@ describe('Boards suite', () => {
         .expect(200)
         .then(res => {
           jestExpect(res.body).not.toHaveLength(0);
-          boardId = res.body[0]._id;
+          boardId = res.body[0].id;
         });
 
       // Test
@@ -152,7 +152,7 @@ describe('Boards suite', () => {
         .set('Accept', 'application/json')
         .send(TEST_BOARD_DATA)
         .expect(200);
-      const boardId = res.body._id;
+      const boardId = res.body.id;
 
       const boardTaskResponses = await Promise.all(
         Array.from(Array(5)).map((_, idx) =>
@@ -172,9 +172,7 @@ describe('Boards suite', () => {
         )
       );
 
-      const boardTaskIds = boardTaskResponses.map(
-        response => response.body._id
-      );
+      const boardTaskIds = boardTaskResponses.map(response => response.body.id);
       await Promise.all(
         boardTaskIds.map(async taskId =>
           request

@@ -53,8 +53,8 @@ describe('Users suite', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
-          expect(res.body._id).to.be.a('string');
-          userId = res.body._id;
+          expect(res.body.id).to.be.a('string');
+          userId = res.body.id;
         });
 
       // Test:
@@ -65,7 +65,7 @@ describe('Users suite', () => {
         .expect('Content-Type', /json/);
 
       expect(userResponse.body).to.be.instanceOf(Object);
-      expect(userResponse.body._id).to.equal(userId);
+      expect(userResponse.body.id).to.equal(userId);
 
       // Clean up, delete the user we created
       await request.delete(routes.users.delete(userId));
@@ -83,8 +83,8 @@ describe('Users suite', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
-          expect(res.body._id).to.be.a('string');
-          userId = res.body._id;
+          expect(res.body.id).to.be.a('string');
+          userId = res.body.id;
           expect(res.body).to.not.have.property('password');
           jestExpect(res.body).toMatchObject({
             login: TEST_USER_DATA.login,
@@ -107,13 +107,13 @@ describe('Users suite', () => {
         .set('Accept', 'application/json')
         .send(TEST_USER_DATA)
         .then(res => {
-          userId = res.body._id;
+          userId = res.body.id;
         });
 
       const updatedUser = {
         ...TEST_USER_DATA,
         name: 'Autotest updated TEST_USER',
-        _id: userId
+        id: userId
       };
 
       // Test
@@ -145,7 +145,7 @@ describe('Users suite', () => {
       const userResponse = await request
         .post(routes.users.create)
         .send(TEST_USER_DATA);
-      const userId = userResponse.body._id;
+      const userId = userResponse.body.id;
 
       // Test:
       const deleteResponse = await request.delete(routes.users.delete(userId));
@@ -160,7 +160,7 @@ describe('Users suite', () => {
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/);
-      const userId = userResponse.body._id;
+      const userId = userResponse.body.id;
 
       const boardResponse = await request
         .post(routes.boards.create)
@@ -168,7 +168,7 @@ describe('Users suite', () => {
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/);
-      const boardId = boardResponse.body._id;
+      const boardId = boardResponse.body.id;
 
       const userTaskResponses = await Promise.all(
         Array.from(Array(2)).map((_, idx) =>
@@ -186,7 +186,7 @@ describe('Users suite', () => {
             .expect('Content-Type', /json/)
         )
       );
-      const userTaskIds = userTaskResponses.map(res => res.body._id);
+      const userTaskIds = userTaskResponses.map(res => res.body.id);
 
       // Test:
       const deleteResponse = await request.delete(routes.users.delete(userId));
