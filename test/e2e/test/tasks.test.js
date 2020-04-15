@@ -36,13 +36,13 @@ describe('Tasks suite', () => {
       .post(routes.boards.create)
       .set('Accept', 'application/json')
       .send(TEST_BOARD_DATA)
-      .then(res => (testBoardId = res.body.id));
+      .then(res => (testBoardId = res.body._id));
 
     await request
       .post(routes.tasks.create(testBoardId))
       .set('Accept', 'application/json')
       .send(TEST_TASK_DATA)
-      .then(res => (testTaskId = res.body.id));
+      .then(res => (testTaskId = res.body._id));
   });
 
   afterAll(async () => {
@@ -80,7 +80,7 @@ describe('Tasks suite', () => {
 
       // Test
       await request
-        .get(routes.tasks.getById(expectedTask.boardId, expectedTask.id))
+        .get(routes.tasks.getById(expectedTask.boardId, expectedTask._id))
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
@@ -101,8 +101,8 @@ describe('Tasks suite', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .then(res => {
-          expect(res.body.id).to.be.a('string');
-          taskId = res.body.id;
+          expect(res.body._id).to.be.a('string');
+          taskId = res.body._id;
           jestExpect(res.body).toMatchObject({
             ...TEST_TASK_DATA,
             boardId: testBoardId
@@ -134,14 +134,14 @@ describe('Tasks suite', () => {
 
       // Test
       await request
-        .put(routes.tasks.update(updatedTask.boardId, updatedTask.id))
+        .put(routes.tasks.update(updatedTask.boardId, updatedTask._id))
         .set('Accept', 'application/json')
         .send(updatedTask)
         .expect(200)
         .expect('Content-Type', /json/);
 
       await request
-        .get(routes.tasks.getById(updatedTask.boardId, updatedTask.id))
+        .get(routes.tasks.getById(updatedTask.boardId, updatedTask._id))
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
