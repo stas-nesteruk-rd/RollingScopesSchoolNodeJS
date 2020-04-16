@@ -12,10 +12,15 @@ exports.save = async board => {
 };
 
 exports.update = async updatedBoard => {
-  return Board.findByIdAndUpdate(updatedBoard._id, updatedBoard, {
-    new: true,
-    runValidators: true
-  });
+  const updated = await Board.findByIdAndUpdate(
+    updatedBoard._id,
+    updatedBoard,
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+  return updated;
 };
 
 exports.delete = async id => {

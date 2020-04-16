@@ -41,6 +41,20 @@ const defineBoardModel = mongoose => {
     }
   );
 
+  const columnsToResponse = columns => {
+    return columns.map(column => {
+      const { id, title, order } = column;
+      return { id, title, order };
+    });
+  };
+
+  boardSchema.statics.toResponse = board => {
+    const { id, title } = board;
+    const columns =
+      board.columns.length > 0 ? columnsToResponse(board.columns) : [];
+    return { id, title, columns };
+  };
+
   const Board = mongoose.model('Board', boardSchema);
   return Board;
 };

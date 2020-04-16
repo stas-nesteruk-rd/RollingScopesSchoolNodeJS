@@ -38,11 +38,10 @@ const defineUserModel = mongoose => {
     }
   );
 
-  schema.methods.toJSON = function() {
-    const userObject = this.toObject();
-    delete userObject.password;
-    return userObject;
-  };
+  schema.statics.toResponse = (user) => {
+    const {id, name, login} = user;
+    return {id, name, login};
+  }
 
   schema.pre('save', async function(next) {
     if (this.isModified('password')) {

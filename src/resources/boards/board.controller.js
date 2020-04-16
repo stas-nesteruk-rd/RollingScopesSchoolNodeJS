@@ -3,11 +3,12 @@ const boardService = require('./board.service');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
 const ValidationError = require('./../../errors/ValidationError');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
+const { Board } = require('./../../db/models');
 
 const getBoardsTreatment = async (req, res, next) => {
   try {
     const boards = await boardService.getAll();
-    res.status(HTTP_STATUS.OK).send(boards);
+    res.status(HTTP_STATUS.OK).send(boards.map(Board.toResponse));
   } catch (err) {
     return next(err);
   }
@@ -21,7 +22,7 @@ const getBoardTreatment = async (req, res, next) => {
     if (!board) {
       throw new ResourceNotFoundError(`Board don't exist by id: ${boardId}`);
     }
-    res.status(HTTP_STATUS.OK).send(board);
+    res.status(HTTP_STATUS.OK).send(Board.toResponse(board));
   } catch (err) {
     return next(err);
   }
@@ -48,7 +49,7 @@ const createBoardTreatment = async (req, res, next) => {
       );
     }
     const board = await boardService.create(req.body);
-    res.status(HTTP_STATUS.OK).send(board);
+    res.status(HTTP_STATUS.OK).send(Board.toResponse(board));
   } catch (err) {
     return next(err);
   }
@@ -59,8 +60,8 @@ const updateBoardTreatment = async (req, res, next) => {
     const boardId = req.params.boardId;
     checkUUID(boardId);
     const keys = Object.keys(req.body);
-    const allowedBoardUpdates = ['_id', 'title', 'columns'];
-    const allowedColumnUpdates = ['_id', 'title', 'order'];
+    const allowedBoardUpdates = ['id', 'title', 'columns'];
+    const allowedColumnUpdates = ['id', 'title', 'order'];
     let isValidOperation = keys.every(key => allowedBoardUpdates.includes(key));
     if (!isValidOperation) {
       throw new ValidationError(
@@ -78,13 +79,11 @@ const updateBoardTreatment = async (req, res, next) => {
         );
       }
     }
-    console.log(req.body);
     const board = await boardService.update(boardId, req.body);
-    console.log(board);
     if (!board) {
       throw new ResourceNotFoundError(`Board don't exist by id: ${boardId}`);
     }
-    res.status(HTTP_STATUS.OK).send(board);
+    res.status(HTTP_STATUS.OK).send(Board.toResponse(board));
   } catch (err) {
     return next(err);
   }
@@ -98,7 +97,7 @@ const deleteBoardTreatment = async (req, res, next) => {
     if (!board) {
       throw new ResourceNotFoundError(`Board don't exist by id: ${boardId}`);
     }
-    res.status(HTTP_STATUS.OK).send(board);
+    res.status(HTTP_STATUS.OK).send(Board.toResponse(board));
   } catch (err) {
     return next(err);
   }

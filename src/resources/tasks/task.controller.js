@@ -4,6 +4,7 @@ const boardService = require('./../boards/board.service');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
 const ValidationError = require('./../../errors/ValidationError');
+const { Task } = require('./../../db/models');
 
 const getTasksTreatment = async (req, res, next) => {
   try {
@@ -14,7 +15,7 @@ const getTasksTreatment = async (req, res, next) => {
       throw new ResourceNotFoundError(`Board don't exist by id: ${boardId}`);
     }
     const tasks = await taskService.getAll(boardId);
-    res.status(HTTP_STATUS.OK).send(tasks);
+    res.status(HTTP_STATUS.OK).send(tasks.map(Task.toResponse));
   } catch (err) {
     return next(err);
   }
@@ -34,7 +35,7 @@ const getTaskTreatment = async (req, res, next) => {
     if (!task) {
       throw new ResourceNotFoundError(`Task don't exist by id: ${taskId}`);
     }
-    res.status(HTTP_STATUS.OK).send(task);
+    res.status(HTTP_STATUS.OK).send(Task.toResponse(task));
   } catch (err) {
     return next(err);
   }
@@ -65,7 +66,7 @@ const createTaskTreatment = async (req, res, next) => {
     const data = req.body;
     data.boardId = boardId;
     const task = await taskService.create(req.body);
-    res.status(HTTP_STATUS.OK).send(task);
+    res.status(HTTP_STATUS.OK).send(Task.toResponse(task));
   } catch (err) {
     return next(err);
   }
@@ -79,7 +80,7 @@ const updateTaskTreatment = async (req, res, next) => {
     checkUUID(taskId);
     const keys = Object.keys(req.body);
     const allowedUpdates = [
-      '_id',
+      'id',
       'title',
       'order',
       'description',
@@ -101,7 +102,7 @@ const updateTaskTreatment = async (req, res, next) => {
     if (!task) {
       throw new ResourceNotFoundError(`Task don't exist by id: ${taskId}`);
     }
-    res.status(HTTP_STATUS.OK).send(task);
+    res.status(HTTP_STATUS.OK).send(Task.toResponse(task));
   } catch (err) {
     return next(err);
   }
@@ -121,7 +122,7 @@ const deleteTaskTreatment = async (req, res, next) => {
     if (!task) {
       throw new ResourceNotFoundError(`Task don't exist by id: ${taskId}`);
     }
-    res.status(HTTP_STATUS.OK).send(task);
+    res.status(HTTP_STATUS.OK).send(Task.toResponse(task));
   } catch (err) {
     return next(err);
   }

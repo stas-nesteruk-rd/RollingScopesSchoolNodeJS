@@ -55,6 +55,11 @@ const defineTaskModel = mongoose => {
       versionKey: false
     }
   );
+  
+  schema.statics.toResponse = (task) => {
+    const { id, title, order, description, userId, boardId, columnId } = task;
+    return { id, title, order, description, userId, boardId, columnId };
+  }
 
   const Task = mongoose.model('Task', schema);
   return Task;

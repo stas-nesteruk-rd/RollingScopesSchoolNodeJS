@@ -20,16 +20,21 @@ exports.create = async data => {
   return await boardRepo.save(board);
 };
 
-exports.update = async (id, data) => {
-  const board = await boardRepo.getById(id);
+exports.update = async (boardId, data) => {
+  const board = await boardRepo.getById(boardId);
   if (!board) {
     return undefined;
   }
-  const updateKeys = Object.keys(data);
-  updateKeys.forEach(key => {
-    board[key] = data[key];
-  });
-  return await boardRepo.update(board);
+  if (data.title) {
+    board.title = data.title;
+  }
+  if (data.columns) {
+    board.columns = data.columns.map(column => {
+      const { id, title, order } = column;
+      return { _id: id, title, order };
+    });
+  }
+  return boardRepo.update(board);
 };
 
 exports.delete = async id => {

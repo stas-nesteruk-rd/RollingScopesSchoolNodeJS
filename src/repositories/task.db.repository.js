@@ -12,7 +12,7 @@ exports.save = async task => {
 };
 
 exports.update = async updatedTask => {
-  return Task.findByIdAndUpdate(updatedTask._id, updatedTask, {
+  return Task.findByIdAndUpdate(updatedTask.id, updatedTask, {
     new: true,
     runValidators: true
   });
