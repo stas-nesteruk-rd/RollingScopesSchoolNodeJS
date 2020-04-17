@@ -1,18 +1,18 @@
 const MEMORY = 'memory';
-const mongodb = require('./mongodb');
-const memory = require('./memory');
+const mongodbRepository = require('./mongodb');
+const memoryRepository = require('./memory');
 
 const mode = process.env.REPOSITORY || MEMORY;
 
-const repositories = strategy => {
+const defineRepositories = strategy => {
   switch (strategy) {
     case 'memory':
-      return memory;
+      return memoryRepository;
     case 'mongodb':
-      return mongodb;
+      return mongodbRepository;
     default:
       throw new Error(`The selected repository isn't supported: ${strategy}`);
   }
 };
 
-module.exports = repositories(mode);
+module.exports = defineRepositories(mode);

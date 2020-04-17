@@ -53,17 +53,22 @@ exports.getById = async (boardId, taskId) => {
   return tasks.find(task => task.boardId === boardId && task.id === taskId);
 };
 
-exports.save = async task => tasks.push(task);
+exports.save = async task => {
+  tasks.push(task);
+  return tasks[tasks.length - 1];
+};
 
 exports.update = async updatedTask => {
   const index = tasks.findIndex(task => task.id === updatedTask.id);
   tasks.splice(index, 1, updatedTask);
+  return tasks[index];
 };
 
 exports.delete = async (boardId, id) => {
   const task = await this.getById(boardId, id);
   const index = tasks.indexOf(task);
   tasks.splice(index, 1);
+  return task;
 };
 
 exports.deleteAllTasksByBoardId = async boardId => {

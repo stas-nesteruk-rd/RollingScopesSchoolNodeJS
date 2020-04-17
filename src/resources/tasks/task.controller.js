@@ -4,7 +4,7 @@ const boardService = require('./../boards/board.service');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
 const ValidationError = require('./../../errors/ValidationError');
-const { Task } = require('./../../db/models');
+const { Task } = require('../../models');
 
 const getTasksTreatment = async (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 const repositories = require('../../repositories');
 const { tasksRepo } = repositories;
-const { Task } = require('../../db/models');
+const { Task } = require('../../models');
 const uuid = require('uuid');
 
 exports.getAll = boardId => tasksRepo.getAll(boardId);
@@ -25,6 +25,9 @@ exports.update = async (boardId, taskId, data) => {
   const task = await this.getById(boardId, taskId);
   if (!task) {
     return undefined;
+  }
+  if (data.id) {
+    delete data.id;
   }
   const updatedKeys = Object.keys(data);
   updatedKeys.forEach(key => {

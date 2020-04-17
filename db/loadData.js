@@ -1,4 +1,5 @@
-const { Task, Board, User } = require('../src/db/models');
+const logger = require('../src/utils/logger/logger.utils');
+const { Task, Board, User } = require('../src/models/mongodb');
 
 const users = [
   new User({
@@ -145,20 +146,28 @@ const createTasks = () => {
 };
 
 const dropDataBase = async () => {
-  console.log('Starting delete data...');
-  await Task.deleteMany();
-  await Board.deleteMany();
-  await User.deleteMany();
-  console.log('Deleting is complete...');
+  try {
+    logger.info('Starting delete data...');
+    await Task.deleteMany();
+    await Board.deleteMany();
+    await User.deleteMany();
+    logger.info('Deleting is complete...');
+  } catch (error) {
+    throw new Error('Drop database is fault.');
+  }
 };
 
 const setupDataBase = async () => {
-  await dropDataBase();
-  console.log('Starting load data...');
-  await createUsers();
-  await createBoards();
-  await createTasks();
-  console.log('Loading is complete...');
+  try {
+    await dropDataBase();
+    logger.info('Starting load data...');
+    await createUsers();
+    await createBoards();
+    await createTasks();
+    logger.info('Loading is complete...');
+  } catch (error) {
+    throw new Error('Load data to database is fault');
+  }
 };
 
 module.exports = setupDataBase;

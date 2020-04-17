@@ -1,6 +1,7 @@
 const repositories = require('../../repositories');
 const { boardsRepo, tasksRepo } = repositories;
-const { Board } = require('../../db/models');
+const { Board } = require('../../models');
+
 const uuid = require('uuid');
 
 exports.getAll = () => boardsRepo.getAll();
@@ -20,6 +21,12 @@ exports.create = async data => {
   return await boardsRepo.save(board);
 };
 
+const titleSort = (first, second) => {
+  if (first.title > second.title) return 1;
+  if (first.title < second.title) return -1;
+  return 0;
+};
+
 exports.update = async (boardId, data) => {
   const board = await boardsRepo.getById(boardId);
   if (!board) {
@@ -29,10 +36,14 @@ exports.update = async (boardId, data) => {
     board.title = data.title;
   }
   if (data.columns) {
-    board.columns = data.columns.map(column => {
-      const { id, title, order } = column;
-      return { _id: id, title, order };
-    });
+    const allowedColumnUpdates = ['title', 'order'];
+    board.columns.sort(titleSort);
+    data.columns.sort(titleSort);
+    for (let i = 0; i < board.columns.length; i++) {
+      allowedColumnUpdates.forEach(key => {
+        board.columns[i][key] = data.columns[i][key];
+      });
+    }
   }
   return boardsRepo.update(board);
 };

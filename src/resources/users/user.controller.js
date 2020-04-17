@@ -3,7 +3,7 @@ const userService = require('./user.service');
 const ValidationError = require('./../../errors/ValidationError');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
-const { User } = require('./../../db/models');
+const { User } = require('../../models');
 
 const getUsersTreatment = async (req, res, next) => {
   try {

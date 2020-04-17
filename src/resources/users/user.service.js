@@ -1,6 +1,6 @@
 const repositories = require('../../repositories');
 const { usersRepo, tasksRepo } = repositories;
-const { User } = require('../../db/models');
+const { User } = require('../../models');
 const uuid = require('uuid');
 
 exports.getAll = () => usersRepo.getAll();

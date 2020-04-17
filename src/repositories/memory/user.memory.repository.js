@@ -35,15 +35,20 @@ exports.getAll = async () => users;
 
 exports.getById = async id => users.find(user => user.id === id);
 
-exports.save = async user => users.push(user);
+exports.save = async user => {
+  users.push(user);
+  return users[users.length - 1];
+};
 
 exports.update = async updatedUser => {
   const index = users.findIndex(user => user.id === updatedUser.id);
   users.splice(index, 1, updatedUser);
+  return users[index];
 };
 
 exports.delete = async id => {
   const user = await this.getById(id);
   const index = users.indexOf(user);
   users.splice(index, 1);
+  return user;
 };

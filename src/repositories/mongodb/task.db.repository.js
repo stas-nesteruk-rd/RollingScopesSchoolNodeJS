@@ -1,4 +1,4 @@
-const { Task } = require('../../db/models');
+const { Task } = require('../../models');
 exports.getAll = async boardId => {
   return Task.find({ boardId });
 };
@@ -18,7 +18,7 @@ exports.update = async updatedTask => {
   });
 };
 exports.delete = async (boardId, id) => {
-  return Task.findOneAndDelete({ _id: id, boardId });
+  return Task.findByIdAndDelete({ _id: id, boardId });
 };
 
 exports.deleteAllTasksByBoardId = async boardId => {
