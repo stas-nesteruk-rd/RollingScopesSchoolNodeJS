@@ -1,5 +1,5 @@
-const usersRepo = require('./../../repositories/user.db.repository');
-const taskRepo = require('./../../repositories/task.db.repository');
+const repositories = require('../../repositories');
+const { usersRepo, tasksRepo } = repositories;
 const { User } = require('../../db/models');
 const uuid = require('uuid');
 
@@ -35,6 +35,6 @@ exports.delete = async id => {
   if (!user) {
     return undefined;
   }
-  await taskRepo.updateUserIdOnNullbyId(id);
+  await tasksRepo.updateUserIdOnNullbyId(id);
   return await usersRepo.delete(id);
 };

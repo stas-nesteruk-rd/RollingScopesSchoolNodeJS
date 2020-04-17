@@ -1,4 +1,4 @@
-const { Task } = require('./../db/models');
+const { Task } = require('../../db/models');
 exports.getAll = async boardId => {
   return Task.find({ boardId });
 };

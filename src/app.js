@@ -1,6 +1,5 @@
 require('./../src/configs/env.config');
-const { connectToDB } = require('./../src/configs/mongoose.config');
-// require('./../src/configs/mongoose.config');
+const { connectToRepository } = require('./repositories');
 const logger = require('./../src/utils/logger/logger.utils');
 const dateToString = require('./../src/utils/date/date.utils');
 const app = require('./../bin/www/index');
@@ -16,8 +15,7 @@ process
       message: `${UNCAUGHT_EXCEPTION}: ${error.message}`,
       stack: error.stack
     });
-    // eslint-disable-next-line  no-process-exit
-    process.exit(1);
+    process.exit = 1;
   })
   .on('unhandledRejection', error => {
     logger.error({
@@ -30,8 +28,8 @@ process
 
 const port = process.env.PORT || 4000;
 
-connectToDB(() => {
+connectToRepository(() => {
   app.listen(port, () => {
-    console.log(`Application running on http://localhost:${port}`);
+    logger.info(`Application running on http://localhost:${port}`);
   });
 });

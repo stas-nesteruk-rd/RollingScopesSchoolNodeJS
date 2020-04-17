@@ -1,4 +1,4 @@
-const { Task, Board, User } = require('./../models');
+const { Task, Board, User } = require('../src/db/models');
 
 const users = [
   new User({

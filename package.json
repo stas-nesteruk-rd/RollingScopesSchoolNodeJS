@@ -9,7 +9,7 @@
   "description": "REST service starter for RS School",
   "main": "src/app.js",
   "scripts": {
-    "start": "nodemon -e js src/app.js",
+    "start": "nodemon -e js,.env src/app.js",
     "lint": "eslint ./ --ignore-path .gitignore --fix",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"

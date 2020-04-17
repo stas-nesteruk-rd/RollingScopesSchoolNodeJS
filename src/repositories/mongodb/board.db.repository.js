@@ -1,4 +1,4 @@
-const { Board } = require('./../db/models');
+const { Board } = require('../../db/models');
 exports.getAll = async () => {
   return Board.find({});
 };

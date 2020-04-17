@@ -1,10 +1,11 @@
-const taskRepo = require('./../../repositories/task.db.repository');
+const repositories = require('../../repositories');
+const { tasksRepo } = repositories;
 const { Task } = require('../../db/models');
 const uuid = require('uuid');
 
-exports.getAll = boardId => taskRepo.getAll(boardId);
+exports.getAll = boardId => tasksRepo.getAll(boardId);
 
-exports.getById = (boardId, taskId) => taskRepo.getById(boardId, taskId);
+exports.getById = (boardId, taskId) => tasksRepo.getById(boardId, taskId);
 
 exports.create = async data => {
   const { title, order, description, userId, boardId, columnId } = data;
@@ -17,7 +18,7 @@ exports.create = async data => {
     boardId,
     columnId
   });
-  return await taskRepo.save(task);
+  return await tasksRepo.save(task);
 };
 
 exports.update = async (boardId, taskId, data) => {
@@ -29,7 +30,7 @@ exports.update = async (boardId, taskId, data) => {
   updatedKeys.forEach(key => {
     task[key] = data[key];
   });
-  return await taskRepo.update(task);
+  return await tasksRepo.update(task);
 };
 
 exports.delete = async (boardId, taskId) => {
@@ -37,5 +38,5 @@ exports.delete = async (boardId, taskId) => {
   if (!task) {
     return undefined;
   }
-  return await taskRepo.delete(boardId, taskId);
+  return await tasksRepo.delete(boardId, taskId);
 };
