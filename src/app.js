@@ -24,6 +24,7 @@ process
       message: `${UNHANDLED_REJECTION}: ${error.message}`,
       stack: error.stack
     });
+    process.exit = 1;
   });
 
 const port = process.env.PORT || 4000;
