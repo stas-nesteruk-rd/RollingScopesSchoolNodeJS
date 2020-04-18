@@ -9,6 +9,7 @@ const errorHandler = (error, req, res, next) => {
   logger.error({
     date: dateToString(),
     message: error.message,
+    status: error.status,
     stack: error.stack
   });
   if (error instanceof AbstractError) {

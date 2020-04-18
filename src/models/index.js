@@ -11,7 +11,7 @@ const defineModels = strategy => {
     case 'mongodb':
       return mongodbModels;
     default:
-      throw new Error(`The selected models isn't supported: ${strategy}`);
+      throw new Error(`The selected model isn't supported: ${strategy}`);
   }
 };
 

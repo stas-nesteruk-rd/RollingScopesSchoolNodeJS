@@ -1,6 +1,6 @@
-const boardsRepo = require('./board.db.repository');
-const usersRepo = require('./user.db.repository');
-const tasksRepo = require('./task.db.repository');
+const boardsRepo = require('./board.mongodb.repository');
+const usersRepo = require('./user.mongodb.repository');
+const tasksRepo = require('./task.mongodb.repository');
 const connectToRepository = require('./../../configs/mongoose.config');
 
 module.exports = {

@@ -1,6 +1,6 @@
-const User = require('./user.model');
-const Board = require('./board.model');
-const Task = require('./task.model');
+const User = require('./user.memory.model');
+const Board = require('./board.memory.model');
+const Task = require('./task.memory.model');
 
 const models = {};
 

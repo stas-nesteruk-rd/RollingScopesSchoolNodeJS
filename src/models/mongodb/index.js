@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const defineUserModel = require('./user.model');
-const defineTaskModel = require('./task.model');
-const defineBoardModel = require('./board.model');
+const defineUserModel = require('./user.mongodb.model');
+const defineTaskModel = require('./task.mongodb.model');
+const defineBoardModel = require('./board.mongodb.model');
 
 const models = {};
 
