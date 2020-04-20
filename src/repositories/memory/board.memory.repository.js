@@ -53,15 +53,20 @@ exports.getAll = async () => boards;
 
 exports.getById = async id => boards.find(board => board.id === id);
 
-exports.save = async board => boards.push(board);
+exports.save = async board => {
+  boards.push(board);
+  return boards[boards.length - 1];
+};
 
 exports.update = async updatedBoard => {
   const index = boards.findIndex(board => board.id === updatedBoard.id);
   boards.splice(index, 1, updatedBoard);
+  return boards[index];
 };
 
 exports.delete = async id => {
   const board = await this.getById(id);
   const index = boards.indexOf(board);
   boards.splice(index, 1);
+  return board;
 };

@@ -1,13 +1,13 @@
-const usersRepo = require('./../../repositories/user.memory.repository');
-const taskRepo = require('./../../repositories/task.memory.repository');
-const User = require('./../../models/user.model');
+const repositories = require('../../repositories');
+const { usersRepo, tasksRepo } = repositories;
+const { User } = require('../../models');
 const uuid = require('uuid');
 
 exports.getAll = () => usersRepo.getAll();
 
 exports.getById = id => usersRepo.getById(id);
 
-exports.create = data => {
+exports.create = async data => {
   const { name, login, password } = data;
   const user = new User({
     id: uuid(),
@@ -15,8 +15,7 @@ exports.create = data => {
     login,
     password
   });
-  usersRepo.save(user);
-  return user;
+  return await usersRepo.save(user);
 };
 
 exports.update = async (id, data) => {
@@ -28,8 +27,7 @@ exports.update = async (id, data) => {
   updateKeys.forEach(key => {
     user[key] = data[key];
   });
-  usersRepo.update(user);
-  return user;
+  return await usersRepo.update(user);
 };
 
 exports.delete = async id => {
@@ -37,7 +35,6 @@ exports.delete = async id => {
   if (!user) {
     return undefined;
   }
-  await taskRepo.updateUserIdOnNullbyId(id);
-  await usersRepo.delete(id);
-  return user;
+  await tasksRepo.updateUserIdOnNullbyId(id);
+  return await usersRepo.delete(id);
 };

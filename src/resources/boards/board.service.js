@@ -1,13 +1,14 @@
-const boardRepo = require('./../../repositories/board.memory.repository');
-const taskRepo = require('./../../repositories/task.memory.repository');
-const { Board } = require('./../../models/board.model');
+const repositories = require('../../repositories');
+const { boardsRepo, tasksRepo } = repositories;
+const { Board } = require('../../models');
+const titleSort = require('../../utils/titleSort/titleSort');
 const uuid = require('uuid');
 
-exports.getAll = () => boardRepo.getAll();
+exports.getAll = () => boardsRepo.getAll();
 
-exports.getById = id => boardRepo.getById(id);
+exports.getById = id => boardsRepo.getById(id);
 
-exports.create = data => {
+exports.create = async data => {
   const { title, columns } = data;
   const board = new Board({
     id: uuid(),
@@ -17,21 +18,28 @@ exports.create = data => {
       return column;
     })
   });
-  boardRepo.save(board);
-  return board;
+  return await boardsRepo.save(board);
 };
 
-exports.update = async (id, data) => {
-  const board = await boardRepo.getById(id);
+exports.update = async (boardId, data) => {
+  const board = await boardsRepo.getById(boardId);
   if (!board) {
     return undefined;
   }
-  const updateKeys = Object.keys(data);
-  updateKeys.forEach(key => {
-    board[key] = data[key];
-  });
-  boardRepo.update(board);
-  return board;
+  if (data.title) {
+    board.title = data.title;
+  }
+  if (data.columns) {
+    const allowedColumnUpdates = ['title', 'order']; // TODO Refactoring, bad solution
+    board.columns.sort(titleSort);
+    data.columns.sort(titleSort);
+    for (let i = 0; i < board.columns.length; i++) {
+      allowedColumnUpdates.forEach(key => {
+        board.columns[i][key] = data.columns[i][key];
+      });
+    }
+  }
+  return boardsRepo.update(board);
 };
 
 exports.delete = async id => {
@@ -39,7 +47,6 @@ exports.delete = async id => {
   if (!board) {
     return undefined;
   }
-  await taskRepo.deleteAllTasksByBoardId(id);
-  await boardRepo.delete(id);
-  return board;
+  await tasksRepo.deleteAllTasksByBoardId(id);
+  return await boardsRepo.delete(id);
 };

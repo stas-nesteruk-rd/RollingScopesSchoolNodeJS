@@ -1,14 +1,14 @@
 const HTTP_STATUS = require('http-status');
-const User = require('./../../models/user.model');
 const userService = require('./user.service');
 const ValidationError = require('./../../errors/ValidationError');
 const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
+const { User } = require('../../models');
 
 const getUsersTreatment = async (req, res, next) => {
   try {
     const users = await userService.getAll();
-    res.status(HTTP_STATUS.OK).send(users);
+    res.status(HTTP_STATUS.OK).send(users.map(User.toResponse));
   } catch (err) {
     return next(err);
   }

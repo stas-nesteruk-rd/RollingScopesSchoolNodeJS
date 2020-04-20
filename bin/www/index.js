@@ -4,7 +4,6 @@ const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
 const logger = require('./../../src/utils/logger/logger.utils');
-const dateToString = require('./../../src/utils/date/date.utils');
 const morgan = require('../../src/configs/morgan.config');
 const errorHandler = require('./../../src/middleware/errorHandler');
 const { apiRouter } = require('./../../src/router');
@@ -12,9 +11,6 @@ const {
   sendJsonData,
   sendJsonError
 } = require('./../../src/utils/response/response.utils');
-
-const UNCAUGHT_EXCEPTION = 'uncaughtException';
-const UNHANDLED_REJECTION = 'unhandledRejection';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
@@ -39,25 +35,5 @@ app.use(apiRouter);
 app.use(router);
 
 app.use(errorHandler);
-
-process
-  .on('uncaughtException', error => {
-    logger.error({
-      date: dateToString(),
-      type: UNCAUGHT_EXCEPTION,
-      message: `${UNCAUGHT_EXCEPTION}: ${error.message}`,
-      stack: error.stack
-    });
-    // eslint-disable-next-line  no-process-exit
-    process.exit(1);
-  })
-  .on('unhandledRejection', error => {
-    logger.error({
-      date: dateToString(),
-      type: UNHANDLED_REJECTION,
-      message: `${UNHANDLED_REJECTION}: ${error.message}`,
-      stack: error.stack
-    });
-  });
 
 module.exports = app;
