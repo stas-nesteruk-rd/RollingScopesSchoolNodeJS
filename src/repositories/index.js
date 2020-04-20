@@ -1,8 +1,8 @@
-const MEMORY = 'memory';
+const MONGODB = 'mongodb';
 const mongodbRepository = require('./mongodb');
 const memoryRepository = require('./memory');
 
-const mode = process.env.REPOSITORY || MEMORY;
+const mode = process.env.REPOSITORY || MONGODB;
 
 const defineRepositories = strategy => {
   switch (strategy) {
