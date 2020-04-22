@@ -1,4 +1,9 @@
 const { User } = require('../../models');
+
+exports.getUserByCredentials = async login => {
+  return User.findOne({ login });
+};
+
 exports.getAll = async () => {
   return User.find({});
 };

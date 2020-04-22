@@ -5,8 +5,19 @@ const ResourceNotFoundError = require('./../../errors/ResourceNotFoundError');
 const checkUUID = require('./../../utils/checkUUID/checkUUID.utils');
 const { User } = require('../../models');
 
+const loginTreatment = async (req, res, next) => {
+  try {
+    const { login, password } = req.body;
+    const token = await userService.getTokenByUserCredentials(login, password);
+    res.status(HTTP_STATUS.OK).send({ token });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getUsersTreatment = async (req, res, next) => {
   try {
+    console.log(req.user);
     const users = await userService.getAll();
     res.status(HTTP_STATUS.OK).send(users.map(User.toResponse));
   } catch (err) {
@@ -84,5 +95,6 @@ module.exports = {
   getUserTreatment,
   createUserTreatment,
   updateUserTreatment,
-  deleteUserTreatment
+  deleteUserTreatment,
+  loginTreatment
 };

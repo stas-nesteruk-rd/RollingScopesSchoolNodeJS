@@ -2,6 +2,22 @@ const repositories = require('../../repositories');
 const { usersRepo, tasksRepo } = repositories;
 const { User } = require('../../models');
 const uuid = require('uuid');
+const bcrypt = require('bcrypt');
+const generateToken = require('./../../utils/token/generateToken.utils');
+const ForbiddenError = require('./../../errors/ForbiddenError');
+
+exports.getTokenByUserCredentials = async (login, password) => {
+  const user = await usersRepo.getUserByCredentials(login);
+  if (!user) {
+    throw new ForbiddenError('Unable to login');
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new ForbiddenError('Unable to login');
+  }
+  const token = generateToken(User.toResponse(user).id, login);
+  return token;
+};
 
 exports.getAll = () => usersRepo.getAll();
 

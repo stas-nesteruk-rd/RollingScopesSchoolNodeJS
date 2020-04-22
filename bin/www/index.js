@@ -6,6 +6,7 @@ const YAML = require('yamljs');
 const logger = require('./../../src/utils/logger/logger.utils');
 const morgan = require('../../src/configs/morgan.config');
 const errorHandler = require('./../../src/middleware/errorHandler');
+const auth = require('./../../src/middleware/auth');
 const { apiRouter } = require('./../../src/router');
 const {
   sendJsonData,
@@ -13,10 +14,10 @@ const {
 } = require('./../../src/utils/response/response.utils');
 
 const app = express();
+const router = express.Router();
 const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
 
-const router = express.Router();
-
+app.use(auth);
 app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 

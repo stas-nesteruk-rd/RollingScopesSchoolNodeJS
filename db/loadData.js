@@ -3,6 +3,12 @@ const { Task, Board, User } = require('../src/models/mongodb');
 
 const users = [
   new User({
+    _id: '40949b50-882b-44c1-9f57-25aef52019f5 ',
+    name: 'Test user',
+    login: 'admin',
+    password: 'admin'
+  }),
+  new User({
     _id: '54caa3f4-6f83-4f5f-b89d-bed3d7d4c5ad',
     name: 'Max Chadway',
     login: 'max',

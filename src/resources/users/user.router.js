@@ -4,11 +4,13 @@ const {
   getUserTreatment,
   createUserTreatment,
   updateUserTreatment,
-  deleteUserTreatment
+  deleteUserTreatment,
+  loginTreatment
 } = require('./user.controller');
 
 const router = express.Router();
 
+router.post('/login', loginTreatment);
 router.get('/users', getUsersTreatment);
 router.get('/users/:userId', getUserTreatment);
 router.post('/users', createUserTreatment);
