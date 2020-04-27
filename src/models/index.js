@@ -1,8 +1,9 @@
 const mongodbModels = require('./mongodb');
 const memoryModels = require('./memory');
 const MONGODB = 'mongodb';
+const { REPOSITORY } = require('../configs/env.config');
 
-const mode = process.env.REPOSITORY || MONGODB;
+const mode = REPOSITORY || MONGODB;
 
 const defineModels = strategy => {
   switch (strategy) {
